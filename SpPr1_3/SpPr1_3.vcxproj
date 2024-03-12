@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{7a2af0b3-258c-43a5-9232-3fdfb5edcaec}</ProjectGuid>
+    <ProjectGuid>{81808eb9-55b3-4697-8148-57ddbf816274}</ProjectGuid>
     <RootNamespace>SpPr13</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -127,16 +127,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\LabWork1\sp_pr3.cpp" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="resource1.h" />
+    <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h" />
+    <ClCompile Include="sp_pr3.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Fate.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\Asus\OneDrive\Рабочий стол\Bsuir\cursor_norm.cur" />
+    <None Include="cursor1.cur" />
+    <None Include="cursor_norm.cur" />
+    <None Include="cursor_pen.cur" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SpPr1_3.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="icon1.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

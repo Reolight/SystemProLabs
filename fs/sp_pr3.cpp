@@ -1,4 +1,4 @@
-#include "Sr_Pr1.h"
+#include "framework.h"
 #include "resource.h"
 
 HINSTANCE hInst;

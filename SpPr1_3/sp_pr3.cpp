@@ -1,5 +1,5 @@
-#include "Sr_Pr1.h"
-#include "resource.h"
+#include "framework.h"
+#include "resource1.h"
 
 HINSTANCE hInst;
 LPCWSTR g_lpszClassName = TEXT("sp_pr1_3_class");
@@ -51,11 +51,10 @@ ATOM RegisterClassWnd(HINSTANCE hInstance) {
 	wcex.cbWndExtra = 0;
 	wcex.hInstance = hInstance;
 
-	// IDI_ICON1 ÑÅÑÄ Ñ{ÑpÑ{ÑÄÑz-ÑÑÑÄ ÑÅÑÇÑyÑâÑyÑ~Ñu Ñ~Ñu ÑÅÑÄÑtÑáÑrÑpÑÑÑçÑrÑpÑuÑÑÑÉÑë
-	wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(101));
+	
+	wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
 
-	// Ñë ÑÅÑÇÑÄÑqÑÄÑrÑpÑ|, Ñ~ÑÄ Ñ{ÑpÑÉÑÑÑÄÑ}Ñ~ÑçÑu Ñ{ÑÖÑÇÑÉÑÄÑÇÑç Ñ~Ñu ÑsÑÇÑÖÑxÑëÑÑÑÉÑë
-	wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
+	wcex.hCursor = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_CURSOR1));
 	wcex.hbrBackground = CreateSolidBrush(RGB(0, 0, 0));
 	wcex.lpszClassName = g_lpszClassName;
 
@@ -65,7 +64,7 @@ ATOM RegisterClassWnd(HINSTANCE hInstance) {
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
 	hInst = hInstance; // Store instance handle in our global variable
-	HMENU hMenu = LoadMenu(hInstance, MAKEINTRESOURCE(111));
+	HMENU hMenu = LoadMenu(hInstance, MAKEINTRESOURCE(IDR_MENU1));
 
 	HWND hWnd = CreateWindowW(g_lpszClassName, g_lpszAplicationTitle, WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, hMenu, hInstance, nullptr);
@@ -81,15 +80,42 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	return TRUE;
 }
 
+void ShowMsgBox(HWND hWnd, LPCWSTR text, LPCWSTR menuName) {
+	MessageBox(hWnd, text, menuName, MB_OK);
+}
+
 LRESULT CALLBACK CmdProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 	int id = LOWORD(wParam);
 	switch (id)
 	{
-	case IDM_FILE_OPEN:
+	case IDM_NEWFILE:
+		ShowMsgBox(hWnd, TEXT("ÑBÑçÑqÑÇÑpÑ~ ÑÅÑÖÑ~Ñ{ÑÑ 'New'"), TEXT("ÑMÑuÑ~Ñê ÑUÑpÑzÑ|"));
+		break;
+	case IDM_OPENFILE:
+		ShowMsgBox(hWnd, TEXT("ÑBÑçÑqÑÇÑpÑ~ ÑÅÑÖÑ~Ñ{ÑÑ 'Open'"), TEXT("ÑMÑuÑ~Ñê ÑUÑpÑzÑ|"));
+		break;
+	case IDM_EXIT:
+		ShowMsgBox(hWnd, TEXT("ÑBÑçÑqÑÇÑpÑ~ ÑÅÑÖÑ~Ñ{ÑÑ 'Exit'"), TEXT("ÑMÑuÑ~Ñê ÑUÑpÑzÑ|"));
+		PostQuitMessage(0);
+		break;
+
+	case IDM_HIGHLIGHT:
+	case IDM_CUT:
+	case IDM_COPY:
+	case IDM_PASTE:
+		break;
+
+	case IDM_HELP:
+		ShowMsgBox(hWnd, TEXT("ÑBÑçÑqÑÇÑpÑ~ ÑÅÑÖÑ~Ñ{ÑÑ 'Help'\n\nCopilot Ñr ÑÅÑÄÑ}ÑÄÑãÑé"), TEXT("ÑMÑuÑ~Ñê ÑRÑÅÑÇÑpÑrÑ{Ñp"));
+		break;
+	case IDM_ABOUT:
+		ShowMsgBox(hWnd, TEXT("ÑBÑçÑqÑÇÑpÑ~ ÑÅÑÖÑ~Ñ{ÑÑ 'About'\nAbout: ÑèÑÑÑÄ ÑÅÑÇÑÄÑÉÑÑÑÄ ÑÅÑÇÑÄÑsÑÇÑpÑ}Ñ}Ñp, Ñ{ÑÄÑÑÑÄÑÇÑpÑë ÑtÑuÑ|ÑpÑuÑÑ Ñ~ÑyÑâÑuÑsÑÄ ÑtÑ|Ñë ÑÑÑÄÑsÑÄ, ÑâÑÑÑÄÑqÑç ÑtÑuÑ|ÑpÑÑÑé Ñ~ÑyÑâÑuÑsÑÄ"), TEXT("ÑMÑuÑ~Ñê ÑRÑÅÑÇÑpÑrÑ{Ñp"));
 		break;
 	default:
 		break;
 	}
+
+	return 0;
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

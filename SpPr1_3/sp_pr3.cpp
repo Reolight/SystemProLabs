@@ -2,6 +2,7 @@
 #include "resource1.h"
 
 HINSTANCE hInst;
+HWND hWnd;
 LPCWSTR g_lpszClassName = TEXT("sp_pr1_3_class");
 LPCWSTR g_lpszAplicationTitle = TEXT("Sp lab 1.3");
 
@@ -30,9 +31,13 @@ int APIENTRY WinMain(
 	}
 
 	MSG msg;
+	HACCEL hAccel = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDR_ACCELERATOR1));
 
-	while (GetMessage(&msg, nullptr, 0, 0))
+
+	while (GetMessage( & msg, nullptr, 0, 0))
 	{
+		if (TranslateAccelerator(hWnd, hAccel, &msg))
+			continue;
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
@@ -66,7 +71,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	hInst = hInstance; // Store instance handle in our global variable
 	HMENU hMenu = LoadMenu(hInstance, MAKEINTRESOURCE(IDR_MENU1));
 
-	HWND hWnd = CreateWindowW(g_lpszClassName, g_lpszAplicationTitle, WS_OVERLAPPEDWINDOW,
+	hWnd = CreateWindowW(g_lpszClassName, g_lpszAplicationTitle, WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, hMenu, hInstance, nullptr);
 
 	if (!hWnd)
@@ -83,13 +88,31 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 void ShowMsgBox(HWND hWnd, LPCWSTR text, LPCWSTR menuName) {
 	MessageBox(hWnd, text, menuName, MB_OK);
 }
+HMENU GetMenuByID(HMENU menu, UINT_PTR id);
+HMENU GetMenuByID(HMENU menu, UINT_PTR id) {
+	int menuCount = GetMenuItemCount(menu);
+	for (int i = 0; i < menuCount; i++) {
+		if (GetMenuItemID(menu, i) == id) return menu;
+		auto submenu = GetSubMenu(menu, i);
+		if (submenu != NULL) return GetMenuByID(submenu, id);
+	}
+
+	return NULL;
+}
+
+HMENU GetMenuByID(HWND hWnd, UINT_PTR id) {
+	auto menu = GetMenu(hWnd);
+	return GetMenuByID(menu, id);
+}
 
 LRESULT CALLBACK CmdProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 	int id = LOWORD(wParam);
+	auto mainMenu = GetMenu(hWnd);
 	switch (id)
 	{
 	case IDM_NEWFILE:
 		ShowMsgBox(hWnd, TEXT("„B„„q„‚„p„~ „„…„~„{„„ 'New'"), TEXT("„M„u„~„ „U„p„z„|"));
+		EnableMenuItem(mainMenu, IDM_HIGHLIGHT, MF_ENABLED);
 		break;
 	case IDM_OPENFILE:
 		ShowMsgBox(hWnd, TEXT("„B„„q„‚„p„~ „„…„~„{„„ 'Open'"), TEXT("„M„u„~„ „U„p„z„|"));
@@ -100,11 +123,23 @@ LRESULT CALLBACK CmdProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 		break;
 
 	case IDM_HIGHLIGHT:
+		EnableMenuItem(mainMenu, IDM_COPY, MF_ENABLED);
+		EnableMenuItem(mainMenu, IDM_CUT, MF_ENABLED);
+		break;
 	case IDM_CUT:
+		EnableMenuItem(mainMenu, IDM_PASTE, MF_ENABLED);
+		break;
 	case IDM_COPY:
+		EnableMenuItem(mainMenu, IDM_PASTE, MF_ENABLED);
+		break;
 	case IDM_PASTE:
 		break;
-
+	case 666: /// „H„p„{„‚„„„„Ž „t„€„{„…„}„u„~„„
+		EnableMenuItem(mainMenu, IDM_HIGHLIGHT, MF_DISABLED);
+		EnableMenuItem(mainMenu, IDM_COPY, MF_DISABLED);
+		EnableMenuItem(mainMenu, IDM_PASTE, MF_DISABLED);
+		EnableMenuItem(mainMenu, IDM_CUT, MF_DISABLED);
+		break;
 	case IDM_HELP:
 		ShowMsgBox(hWnd, TEXT("„B„„q„‚„p„~ „„…„~„{„„ 'Help'\n\nCopilot „r „„€„}„€„‹„Ž"), TEXT("„M„u„~„ „R„„‚„p„r„{„p"));
 		break;
@@ -122,6 +157,27 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
+	case WM_CREATE: {
+		HMENU hFileMenu = GetSubMenu(GetMenu(hWnd), 0);
+		AppendMenu(hFileMenu, MF_ENABLED, 666, TEXT("„H„p„{„‚„„„„Ž „t„€„{„…„}„u„~„„"));
+		break;
+	}
+	case WM_CONTEXTMENU:
+		TrackPopupMenu(GetSubMenu(GetMenu(hWnd), 1),
+			TPM_LEFTALIGN | TPM_TOPALIGN | TPM_LEFTBUTTON | TPM_VERPOSANIMATION,
+			LOWORD(lParam), HIWORD(lParam), 0, hWnd, NULL);
+		break;
+	case WM_MENUSELECT: {
+		TCHAR buf[300];
+		int size;
+		size = LoadString(hInst, LOWORD(wParam), buf, 300);
+		HDC hdc1 = GetDC(hWnd);
+		RECT rc; GetClientRect(hWnd, &rc);
+		FillRect(hdc1, &rc, CreateSolidBrush(RGB(0, 0, 0)));
+		TextOut(hdc1, rc.left + 25, rc.bottom - 30, buf, lstrlen(buf));
+		ReleaseDC(hWnd, hdc1);
+		break; 
+	}
 	case WM_COMMAND:
 		CmdProc(hWnd, message, wParam, lParam);
 		break;

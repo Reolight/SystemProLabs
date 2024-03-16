@@ -189,7 +189,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		HANDLE_MSG(hWnd, WM_CREATE, OnCreate);
 		HANDLE_MSG(hWnd, WM_CONTEXTMENU, OnContextMenu);
 		HANDLE_MSG(hWnd, WM_MENUSELECT, OnMenuItemHover);
-		HANDLE_MSG(hWnd, WM_DESTROY, OnDestroy);\
+		HANDLE_MSG(hWnd, WM_DESTROY, OnDestroy);
+		
 	case WM_COMMAND:
 		CmdProc(hWnd, message, wParam, lParam);
 		break;

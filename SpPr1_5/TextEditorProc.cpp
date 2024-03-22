@@ -9,7 +9,7 @@ wchar_t clipboard[CLIPBOARD_SIZE]{ 0 };
 
 vector<array<wchar_t, CLIPBOARD_SIZE>> textList;
 
-bool AddString(HWND hList, LPCWSTR string) {
+bool AddString(HWND hList, const LPCWSTR string) {
     return SendMessage(hList, LB_ADDSTRING, CLIPBOARD_SIZE, (LPARAM)string);
 }
 
@@ -23,8 +23,8 @@ bool onEditorInit(HWND hDlg, HWND hWnd, LPARAM lParam) {
     HWND hList = GetDlgItem(hDlg, IDC_LIST1);
     
     for (const auto& str : textList) {
-        if (!AddString(hList, str.data()))
-            throw new exception("Text wasn't inserted");
+        LPCWSTR lpcwstr(str.data());
+        AddString(hList, lpcwstr);
     }
 
     return 1;
@@ -33,16 +33,16 @@ bool onEditorInit(HWND hDlg, HWND hWnd, LPARAM lParam) {
 void OnReadClicked(HWND hwnd) {
     HWND hEdit = GetDlgItem(hwnd, IDC_EDIT1);
     SendMessage(hEdit, WM_GETTEXT, CLIPBOARD_SIZE, (LPARAM)clipboard);
-    // MessageBox(hwnd, clipboard, _T("ÑRÑ{ÑÄÑÅÑyÑÇÑÄÑrÑpÑ~ÑÄ"), MB_OK | MB_ICONINFORMATION);
+    Button_Enable(GetDlgItem(hwnd, IDC_ADDTEXT), true);
 }
 
 void OnAddClicked(HWND hwnd, HWND hwndCtl) {
-    if (!AddString(GetDlgItem(hwnd, IDC_LIST1), clipboard)) {
+    if (AddString(GetDlgItem(hwnd, IDC_LIST1), clipboard)) {
         ShowError(hwnd, _T("ÑSÑuÑ{ÑÉÑÑ Ñ~Ñu ÑtÑÄÑqÑpÑrÑ|ÑuÑ~"), _T("ÑKÑpÑ{ÑpÑë-ÑÑÑÄ Ñ~ÑuÑÅÑÄÑ~ÑëÑÑÑ~ÑpÑë ÑÄÑäÑyÑqÑ{Ñp"));
         return;
     }
 
-    // Button_Enable(hwndCtl, false);
+    Button_Enable(hwndCtl, false);
 }
 
 void OnOk(HWND hwnd) {

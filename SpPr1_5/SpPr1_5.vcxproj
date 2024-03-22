@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="FileEditor.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SpPr1_5.h" />
@@ -134,6 +135,7 @@
     <ClInclude Include="TextEditorProc.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FileExitor.cpp" />
     <ClCompile Include="SpPr1_5.cpp" />
     <ClCompile Include="TextEditorProc.cpp" />
   </ItemGroup>

@@ -30,12 +30,18 @@
     <ClInclude Include="TextEditorProc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FileEditor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SpPr1_5.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TextEditorProc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileExitor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

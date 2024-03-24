@@ -5,6 +5,7 @@
 #include "windowsx.h"
 #include "SpPr1_5.h"
 #include "TextEditorProc.h"
+#include "FileEditor.h"
 
 #define MAX_LOADSTRING 100
 
@@ -151,8 +152,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             switch (wmId)
             {
             case IDM_VIEW_TEXT:
-                MessageBox(hWnd, TEXT("view text pressed"),
-                    TEXT("view text"), MB_OK);
+                DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG2), hWnd, FileEditorProc);
                 break;
             case IDM_VIEW_CTL:
                 DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), hWnd, TextStrProc);

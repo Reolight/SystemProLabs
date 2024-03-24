@@ -41,7 +41,7 @@
     <ClCompile Include="TextEditorProc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FileExitor.cpp">
+    <ClCompile Include="FileEditor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -2,6 +2,7 @@
 
 #define TEXTEDITORPROC_H
 
+#include <format>
 #include "framework.h"
 #include "windowsx.h"
 #include "resource.h"

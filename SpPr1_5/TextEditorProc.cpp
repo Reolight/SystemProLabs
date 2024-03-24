@@ -18,8 +18,8 @@ void ShowError(HWND hwnd, LPCWSTR text, LPCWSTR caption) {
 }
 
 bool onEditorInit(HWND hDlg, HWND hWnd, LPARAM lParam) {
-    if (savedCount == 0) return 1;
     Button_Enable(GetDlgItem(hDlg, IDC_ADDTEXT), false);
+    if (savedCount == 0) return 1;
     HWND hList = GetDlgItem(hDlg, IDC_LIST1);
     
     for (const auto& str : textList) {
@@ -37,11 +37,7 @@ void OnReadClicked(HWND hwnd) {
 }
 
 void OnAddClicked(HWND hwnd, HWND hwndCtl) {
-    if (AddString(GetDlgItem(hwnd, IDC_LIST1), clipboard)) {
-        ShowError(hwnd, _T("ÑSÑuÑ{ÑÉÑÑ Ñ~Ñu ÑtÑÄÑqÑpÑrÑ|ÑuÑ~"), _T("ÑKÑpÑ{ÑpÑë-ÑÑÑÄ Ñ~ÑuÑÅÑÄÑ~ÑëÑÑÑ~ÑpÑë ÑÄÑäÑyÑqÑ{Ñp"));
-        return;
-    }
-
+    auto index = AddString(GetDlgItem(hwnd, IDC_LIST1), clipboard);
     Button_Enable(hwndCtl, false);
 }
 
@@ -72,10 +68,10 @@ void OnCancel(HWND hwnd) {
 void OnEditorCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify) {
     switch (id)
     {
-    case IDC_READTEXT:  OnReadClicked(hwnd); break;
-    case IDC_ADDTEXT:   OnAddClicked(hwnd, hwndCtl); break;
-    case IDOK:          OnOk(hwnd); break;
-    case IDCANCEL:      OnCancel(hwnd); break;
+    case IDC_READTEXT:  OnReadClicked(hwnd);            break;
+    case IDC_ADDTEXT:   OnAddClicked(hwnd, hwndCtl);    break;
+    case IDOK:          OnOk(hwnd);                     break;
+    case IDCANCEL:      OnCancel(hwnd);                 break;
     default:
         break;
     }
@@ -87,7 +83,7 @@ INT_PTR CALLBACK TextStrProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
     switch (message)
     {
         HANDLE_MSG(hDlg, WM_INITDIALOG, onEditorInit);
-        HANDLE_MSG(hDlg, WM_COMMAND, OnEditorCommand);
+        HANDLE_MSG(hDlg, WM_COMMAND,    OnEditorCommand);
     }
 
     return (INT_PTR)FALSE;
